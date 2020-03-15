@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"os"
-	"os/exec"
 
 	"github.com/gorilla/context"
 	"github.com/gorilla/websocket"
@@ -38,6 +36,7 @@ func wsMessage(w http.ResponseWriter, r *http.Request) {
 		log.Println("read:", err)
 		return
 	}
+
 	log.Printf("recv: %s", message)
 	ch <- message
 
@@ -48,32 +47,17 @@ func wsMessage(w http.ResponseWriter, r *http.Request) {
 		log.Println("ws write err:", err)
 		return
 	}
+
 	log.Println("ws sent response")
 }
 
 func main() {
 
-	cmd := exec.Command("cmd", "/c", "cls")
-	cmd.Stdout = os.Stdout
-	cmd.Run()
-
 	go procMsg()
 
 	http.Handle("/", http.FileServer(http.Dir("./static")))
 
-	// http.HandleFunc("/home.html/", home)
-
-	// http.HandleFunc("/echo", wsEcho)
 	http.HandleFunc("/ws", wsMessage)
-
-	// http.HandleFunc("/ws", wSocket)
-
-	// http.Handle("/download/", http.StripPrefix("/download/",
-	// 	http.FileServer(http.Dir("download"))))
-	// http.Handle("/img/", http.StripPrefix("/img/",
-	// 	http.FileServer(http.Dir("img"))))
-	// http.Handle("/", http.StripPrefix("/",
-	// 	http.FileServer(http.Dir("root"))))
 
 	log.Println("Running...")
 
