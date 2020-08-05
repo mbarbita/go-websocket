@@ -5,7 +5,6 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/gorilla/context"
 	"github.com/gorilla/websocket"
 )
 
@@ -61,17 +60,7 @@ func main() {
 
 	log.Println("Running...")
 
-	// Gorilla mux
-	// go func() {
-	// 	err := http.ListenAndServeTLS(":443", "pki/server.crt", "pki/server.key",
-	// 		context.ClearHandler(http.DefaultServeMux))
-	// 	// err := http.ListenAndServe(":80", nil)
-	// 	if err != nil {
-	// 		panic("ListenAndServeTLS: " + err.Error())
-	// 	}
-	// }()
-
-	err := http.ListenAndServe(":80", context.ClearHandler(http.DefaultServeMux))
+	err := http.ListenAndServe(":80", nil)
 	if err != nil {
 		panic("ListenAndServe: " + err.Error())
 	}
